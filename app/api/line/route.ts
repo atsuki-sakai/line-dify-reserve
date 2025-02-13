@@ -3,12 +3,26 @@ import { LineService } from '@/services/lineService'
 import { DifyService } from '@/services/difyService'
 import { LineWebhookBody } from '@/types/line'
 
-// GETメソッドも定義して405エラーを防ぐ
+// OPTIONSメソッドを追加（CORSプリフライトリクエスト対応）
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 200,
+        headers: {
+            'Allow': 'POST, OPTIONS',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-line-signature',
+        },
+    })
+}
+
+// GETメソッドの定義
 export async function GET() {
-    return NextResponse.json(
-        { error: 'Method not allowed' },
-        { status: 405 }
-    )
+    return new NextResponse(null, {
+        status: 405,
+        headers: {
+            'Allow': 'POST, OPTIONS'
+        }
+    })
 }
 
 // POSTメソッドの処理
