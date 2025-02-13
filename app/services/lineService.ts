@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { LineMessage } from '../types/line'
+import { LineMessage } from '@/types/line'
 
 export class LineService {
     private readonly replyUrl: string
