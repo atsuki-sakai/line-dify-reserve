@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
   params,
 }: {
@@ -9,7 +9,6 @@ export default function DashboardLayout({
 }) {
   return (
     <div>
-      {/* ここにダッシュボードの共通レイアウトを追加 */}
       <main>
         {children}: {params.salonId}
       </main>
