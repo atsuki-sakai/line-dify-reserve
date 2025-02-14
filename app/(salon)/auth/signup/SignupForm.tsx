@@ -16,18 +16,13 @@ export default function SignupForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password, role: "admin" }),
+        body: JSON.stringify({ email, password, role: "salon" }),
       });
 
       if (res.ok) {
@@ -36,7 +31,7 @@ export default function SignupForm() {
         if (data.redirectUrl) {
           router.push(data.redirectUrl);
         } else {
-          router.push("/admin/dashboard");
+          router.push("/auth/login");
         }
       } else {
         // 登録失敗時の処理
@@ -45,7 +40,6 @@ export default function SignupForm() {
       }
     } catch (error) {
       console.log(error);
-      setError("Signup failed");
     }
   };
 
@@ -53,7 +47,7 @@ export default function SignupForm() {
     <div className="flex justify-center items-center h-screen">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>管理者登録</CardTitle>
+          <CardTitle>サロン登録</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -85,7 +79,7 @@ export default function SignupForm() {
             </Button>
           </form>
           <a
-            href="/admin/login"
+            href="/auth/login"
             className="block text-indigo-500 underline text-end w-full mt-5 text-sm"
           >
             ログインはこちら
