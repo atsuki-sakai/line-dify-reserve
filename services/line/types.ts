@@ -24,3 +24,9 @@ export type LineMessage = {
     type: string
     text: string
 } 
+
+export type LineProfile = {
+    displayName: string
+    userId: string
+    language: string
+}

@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { LineMessage } from '@/types/line'
+import { LineMessage, LineProfile } from './types'
 
 export class LineService {
     private readonly replyUrl: string
@@ -39,6 +39,20 @@ export class LineService {
         }
 
         return response
+    }
+
+    async getProfile(lineId: string): Promise<LineProfile> {
+        const response = await fetch(`https://api.line.me/v2/bot/profile/${lineId}`, {
+            headers: {
+                'Authorization': `Bearer ${this.accessToken}`
+            }
+        })
+
+        if (!response.ok) {
+            throw new Error(`LINE API error: ${response.statusText}`)
+        }
+
+        return response.json()
     }
 
     verifySignature(body: string, signature: string | null): boolean {

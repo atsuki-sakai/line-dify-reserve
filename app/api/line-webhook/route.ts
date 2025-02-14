@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
-import { LineService } from '@/services/lineService'
-import { DifyService } from '@/services/difyService'
-import { LineWebhookBody } from '@/types/line'
+import { LineService } from '@/services/line/lineService'
+import { DifyService } from '@/services/dify/difyService'
+import { LineWebhookBody } from '@/services/line/types'
 
 // OPTIONSメソッドを追加（CORSプリフライトリクエスト対応）
 export async function OPTIONS() {
@@ -42,24 +42,24 @@ export async function POST(request: Request) {
         }
 
         const webhookData = JSON.parse(body) as LineWebhookBody
+        const destination = webhookData.destination
         console.log('webhookData', webhookData)
         
         await Promise.all(webhookData.events.map(async (event) => {
             if (event.type === 'message' && event.message.type === 'text') {
                 try {
-                    console.log('Processing message:', {
-                        type: event.message.type,
-                        text: event.message.text,
-                        userId: event.source.userId,
-                        timestamp: new Date(event.timestamp).toISOString()
-                    })
 
-                    const difyResponse = await difyService.sendMessage(event.message.text || '')
-                    
+                    const lineProfile = await lineService.getProfile(event.source.userId)
+                    const difyResponse = await difyService.sendMessage({
+                        message: event.message.text ?? "",
+                        lineId: event.source.userId,
+                        name: lineProfile.displayName,
+                        destination: destination
+                    })
                     await lineService.replyMessage(event.replyToken, [{
                         type: 'text',
                         text: difyResponse
-                    }])
+                    }]);
 
                     console.log('Reply sent successfully')
                 } catch (error) {
