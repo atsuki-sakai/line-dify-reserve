@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import {
   Dialog,
   DialogBackdrop,
@@ -31,16 +32,13 @@ import {
 } from "@heroicons/react/20/solid";
 import { ThemeToggleBtn } from "@/components/common/ThemeToggleBtn";
 
-const userNavigation = [
-  { name: "Your profile", href: "#" },
-  { name: "Sign out", href: "#" },
-];
+const userNavigation = [{ name: "Sign out" }];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function SideBar({
+export default function SalonSideBar({
   children,
   salonId,
 }: {
@@ -304,13 +302,14 @@ export default function SideBar({
                   >
                     {userNavigation.map((item) => (
                       <MenuItem key={item.name}>
-                        <a
-                          href={item.href}
-                          onClick={() => {}}
+                        <button
+                          onClick={() => {
+                            signOut();
+                          }}
                           className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
                         >
                           {item.name}
-                        </a>
+                        </button>
                       </MenuItem>
                     ))}
                   </MenuItems>
