@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 import { firestore } from '@/services/firistore/firestore'
-import type { Customer } from '@/services/firistore/types'
-import { CollectionName } from '@/services/firistore/types'
 import { LineService } from '@/services/line/lineService'
+
+import type { ICustomer } from '@/services/firistore/types/cutomer'
 
 export async function GET(
     request: Request,
@@ -17,8 +17,10 @@ export async function GET(
         const lineProfile = await lineService.getProfile(id)
         console.log("lineProfile; ", lineProfile)
         
-        const docRef = await firestore.collection(CollectionName.Customers).doc(id).get()
-        if (!docRef.exists) {
+        // const docRef = await firestore.collection(CollectionName.Customers).doc(id).get()
+
+        const customer = await firestore.customer.get(id)
+        if (!customer) {
             return NextResponse.json({ 
                 id: "",
                 name: "",
@@ -26,10 +28,7 @@ export async function GET(
                 phone: ""
             })
         }
-        return NextResponse.json({ 
-                id: docRef.id,
-                ...docRef.data()
-        })
+        return NextResponse.json(customer)
 
     } catch (e) {
         console.error('Firestore error:', e)
@@ -59,11 +58,11 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         }
         
         const { name, destination, phone } = body
-        await firestore.collection(CollectionName.Customers).doc(lineId).set({ 
-            lineId, 
-            name, 
-            destination, 
-            phone 
+        await firestore.customer.set({
+            lineId,
+            name,
+            destination,
+            phone
         });
         return NextResponse.json({ name, destination, phone })
     } catch (error) {
@@ -80,8 +79,8 @@ export async function PUT(
 ) {
     try {
         const { id } = await context.params
-        const data: Partial<Customer> = await request.json()
-        await firestore.collection(CollectionName.Customers).doc(id).update(data)
+        const data: Partial<ICustomer> = await request.json()
+        await firestore.customer.update(id, data)
         
         return NextResponse.json({ 
             success: true,
@@ -103,7 +102,7 @@ export async function DELETE(
 ) {
     try {
         const { id } = await context.params
-        await firestore.collection(CollectionName.Customers).doc(id).delete()
+        await firestore.customer.delete(id)
         
         return NextResponse.json({ 
             success: true,

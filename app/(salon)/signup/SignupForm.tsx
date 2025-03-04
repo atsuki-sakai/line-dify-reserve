@@ -11,23 +11,28 @@ export default function SignupForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
     try {
-      const res = await fetch("/api/admin/signup", {
+      const res = await fetch("/api/salon/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email,
+          password,
+          name,
+          address,
+          phone,
+          distinationId: "",
+        }),
       });
 
       if (res.ok) {
@@ -36,7 +41,7 @@ export default function SignupForm() {
         if (data.redirectUrl) {
           router.push(data.redirectUrl);
         } else {
-          router.push("/admin/dashboard");
+          router.push("/login");
         }
       } else {
         // 登録失敗時の処理
@@ -45,7 +50,6 @@ export default function SignupForm() {
       }
     } catch (error) {
       console.log(error);
-      setError("Signup failed");
     }
   };
 
@@ -53,7 +57,7 @@ export default function SignupForm() {
     <div className="flex justify-center items-center h-screen">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>管理者登録</CardTitle>
+          <CardTitle>サロン登録</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -67,6 +71,24 @@ export default function SignupForm() {
               placeholder="メールアドレス"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              type="text"
+              placeholder="店舗名"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Input
+              type="text"
+              placeholder="住所"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+            <Input
+              type="tel"
+              placeholder="電話番号"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
             <Input
               type="password"
@@ -85,7 +107,7 @@ export default function SignupForm() {
             </Button>
           </form>
           <a
-            href="/admin/login"
+            href="/login"
             className="block text-indigo-500 underline text-end w-full mt-5 text-sm"
           >
             ログインはこちら

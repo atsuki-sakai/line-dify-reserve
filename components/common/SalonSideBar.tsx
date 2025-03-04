@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
@@ -276,19 +275,12 @@ export default function SalonSideBar({
                 <Menu as="div" className="relative">
                   <MenuButton className="-m-1.5 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>
-                    <Image
-                      alt=""
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      className="size-8 rounded-full bg-gray-50"
-                      width={32}
-                      height={32}
-                    />
                     <span className="hidden lg:flex lg:items-center">
                       <span
                         aria-hidden="true"
                         className="ml-4 text-sm/6 font-semibold text-foreground"
                       >
-                        Tom Cook
+                        サロン管理者
                       </span>
                       <ChevronDownIcon
                         aria-hidden="true"

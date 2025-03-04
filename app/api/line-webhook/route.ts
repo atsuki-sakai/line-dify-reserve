@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
-import { LineService } from '@/services/line/lineService'
-import { DifyService } from '@/services/dify/difyService'
+import { LineService } from '@/services/line/LineService'
+import { DifyService } from '@/services/dify/DifyService'
 import { LineWebhookBody } from '@/services/line/types'
 
-// OPTIONSメソッドを追加（CORSプリフライトリクエスト対応）
+// OPTIONSメソッドを追加（CORSプリフライトリクエスト対応）: Vercelのデプロイ環境で必要
 export async function OPTIONS() {
     return new NextResponse(null, {
         status: 200,

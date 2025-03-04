@@ -1,14 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async redirects() {
-      return [
-          {
-              source: '/api/line/',
-              destination: '/api/line',
-              permanent: true,
-          },
-      ]
-  },
-}
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'images.unsplash.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'tailwindui.com',
+            },
+        ],
+    },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig; 
